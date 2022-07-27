@@ -13,7 +13,7 @@
 
 // global variables
 enum states {entering_password, checking_password, incorrect_password, correct_password};
-enum states CURRENT_STATE = entering_password;
+enum states CURRENT_STATE = entering_password;S
 
 // function prototypes
 void USART1_init(void);

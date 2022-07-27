@@ -33,9 +33,7 @@ int main(void)
 	set_servo_position(latch);  // set servo to latch position
 
 	DDRD &= ~(1 << PD7);  // set port D pin 7 as input (for push button)
-	PORTD &= ~(1 << PD7);
-	
-	char x = 0x00;
+		
 	char password[PASSWORD_LENGTH + 1] = ""; // password received from other microcontroller
 	int chars_entered = 0;  // number of characters recieved
 	while (2 + 2 == 4)
@@ -64,16 +62,11 @@ int main(void)
 				break;  // break case locked
 
 			case unlocked:
-				set_servo_position(unlatch);  // set servo to unlatch position
+				set_servo_position(unlatch);  // set servo to unlatch 
 				
-				do 
-				{
-					x = (PIND & (1 << PD7)) >> 7;  // read port D pin 7
-				} while (x == 0x00);
-				x = 
-				PORTD &= ~(1 << PD7);
-				
-				USART1_transmit('L');
+				while (!(PIND & (1 << PD7)));  // wait for push button to be pressed (polling)
+
+				USART1_transmit('L');  // signal other microcontroller that lock is latched
 
 				CURRENT_STATE = locked;  // go to locked state
 				break;  // break case unlocked
@@ -118,20 +111,9 @@ void USART1_init(void)
 
 void timer0_fastpwm_init(void)
 {
-	TCCR0 &= ~(1 << FOC0);  // set FOC0 as 0 
-	/* Bit 7 – FOC0: Force Output Compare
-	The FOC0 bit is only active when the WGM00 bit specifies a non-PWM mode. However, for
-	ensuring compatibility with future devices, this bit must be set to zero when TCCR0 is written
-	when operating in PWM mode. When writing a logical one to the FOC0 bit, an immediate Compare Match is forced on the Waveform Generation unit. The OC0 output is changed according to
-	its COM01:0 bits setting. Note that the FOC0 bit is implemented as a strobe. Therefore it is the
-	value present in the COM01:0 bits that determines the effect of the forced compare.
-	A FOC0 strobe will not generate any interrupt, nor will it clear the timer in CTC mode using
-	OCR0 as TOP.
-	The FOC0 bit is always read as zero. */
-
+	TCCR0 &= ~(1 << FOC0);  // set FOC0 as 0 (should be 0 for non-pwm mode according to datasheet)
 	TCCR0 |= (1 << WGM00) | (1 << WGM01);  // Waveform Generation Mode => PWM
     TCCR0 |= (1 << COM01);  // Clear OC0 on Compare Match, set OC0 at TOP (non-inverting mode)
-	TCCR0 &= ~(1 << COM00);  // Clear OC0 on Compare Match, set OC0 at TOP (non-inverting mode)
     TCCR0 |= (1 << CS01) | (1 << CS00);  // Clock Select => clk/64 (from prescaler)
 
 	DDRB |= (1 << PB0);  // set PB0 as output for PWM (OC0)
@@ -146,7 +128,7 @@ void USART1_transmit(char data)
 
 char USART1_receive(void)
 {
-	while (!(UCSR1A & (1 << RXC1)));  // wait until data is received
+	while (!(UCSR1A & (1 << RXC1)));  // wait until data is received completely
 	return UDR1;  // return data
 }
 

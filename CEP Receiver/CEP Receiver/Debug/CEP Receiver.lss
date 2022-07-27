@@ -3,31 +3,31 @@ CEP Receiver.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000006  00800100  0000021e  000002b2  2**0
+  0 .data         00000006  00800100  0000020c  000002a0  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         0000021e  00000000  00000000  00000094  2**1
+  1 .text         0000020c  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .bss          00000001  00800106  00800106  000002b8  2**0
+  2 .bss          00000001  00800106  00800106  000002a6  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  000002b8  2**0
+  3 .comment      00000030  00000000  00000000  000002a6  2**0
                   CONTENTS, READONLY
-  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000002e8  2**2
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000002d8  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 00000048  00000000  00000000  00000324  2**0
+  5 .debug_aranges 00000048  00000000  00000000  00000314  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   0000091f  00000000  00000000  0000036c  2**0
+  6 .debug_info   00000912  00000000  00000000  0000035c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 00000770  00000000  00000000  00000c8b  2**0
+  7 .debug_abbrev 00000761  00000000  00000000  00000c6e  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   000003f5  00000000  00000000  000013fb  2**0
+  8 .debug_line   000003dd  00000000  00000000  000013cf  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000084  00000000  00000000  000017f0  2**2
+  9 .debug_frame  00000084  00000000  00000000  000017ac  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    0000047c  00000000  00000000  00001874  2**0
+ 10 .debug_str    0000047c  00000000  00000000  00001830  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    000000ff  00000000  00000000  00001cf0  2**0
+ 11 .debug_loc    000000d4  00000000  00000000  00001cac  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000038  00000000  00000000  00001def  2**0
+ 12 .debug_ranges 00000038  00000000  00000000  00001d80  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -74,7 +74,7 @@ Disassembly of section .text:
   7c:	11 e0       	ldi	r17, 0x01	; 1
   7e:	a0 e0       	ldi	r26, 0x00	; 0
   80:	b1 e0       	ldi	r27, 0x01	; 1
-  82:	ee e1       	ldi	r30, 0x1E	; 30
+  82:	ec e0       	ldi	r30, 0x0C	; 12
   84:	f2 e0       	ldi	r31, 0x02	; 2
   86:	02 c0       	rjmp	.+4      	; 0x8c <__do_copy_data+0x10>
   88:	05 90       	lpm	r0, Z+
@@ -96,8 +96,8 @@ Disassembly of section .text:
   9c:	a7 30       	cpi	r26, 0x07	; 7
   9e:	b2 07       	cpc	r27, r18
   a0:	e1 f7       	brne	.-8      	; 0x9a <.do_clear_bss_loop>
-  a2:	0e 94 90 00 	call	0x120	; 0x120 <main>
-  a6:	0c 94 0d 01 	jmp	0x21a	; 0x21a <_exit>
+  a2:	0e 94 8d 00 	call	0x11a	; 0x11a <main>
+  a6:	0c 94 04 01 	jmp	0x208	; 0x208 <_exit>
 
 000000aa <__bad_interrupt>:
   aa:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
@@ -142,15 +142,10 @@ void USART1_init(void)
 
 void timer0_fastpwm_init(void)
 {
-	TCCR0 &= ~(1 << FOC0);  // set FOC0 as 0 
+	TCCR0 &= ~(1 << FOC0);  // set FOC0 as 0 (should be 0 for non-pwm mode according to datasheet)
   d4:	83 b7       	in	r24, 0x33	; 51
   d6:	8f 77       	andi	r24, 0x7F	; 127
   d8:	83 bf       	out	0x33, r24	; 51
-	value present in the COM01:0 bits that determines the effect of the forced compare.
-	A FOC0 strobe will not generate any interrupt, nor will it clear the timer in CTC mode using
-	OCR0 as TOP.
-	The FOC0 bit is always read as zero. */
-
 	TCCR0 |= (1 << WGM00) | (1 << WGM01);  // Waveform Generation Mode => PWM
   da:	83 b7       	in	r24, 0x33	; 51
   dc:	88 64       	ori	r24, 0x48	; 72
@@ -159,283 +154,266 @@ void timer0_fastpwm_init(void)
   e0:	83 b7       	in	r24, 0x33	; 51
   e2:	80 62       	ori	r24, 0x20	; 32
   e4:	83 bf       	out	0x33, r24	; 51
-	TCCR0 &= ~(1 << COM00);  // Clear OC0 on Compare Match, set OC0 at TOP (non-inverting mode)
-  e6:	83 b7       	in	r24, 0x33	; 51
-  e8:	8f 7e       	andi	r24, 0xEF	; 239
-  ea:	83 bf       	out	0x33, r24	; 51
     TCCR0 |= (1 << CS01) | (1 << CS00);  // Clock Select => clk/64 (from prescaler)
-  ec:	83 b7       	in	r24, 0x33	; 51
-  ee:	83 60       	ori	r24, 0x03	; 3
-  f0:	83 bf       	out	0x33, r24	; 51
+  e6:	83 b7       	in	r24, 0x33	; 51
+  e8:	83 60       	ori	r24, 0x03	; 3
+  ea:	83 bf       	out	0x33, r24	; 51
 
 	DDRB |= (1 << PB0);  // set PB0 as output for PWM (OC0)
-  f2:	87 b3       	in	r24, 0x17	; 23
-  f4:	81 60       	ori	r24, 0x01	; 1
-  f6:	87 bb       	out	0x17, r24	; 23
-  f8:	08 95       	ret
+  ec:	87 b3       	in	r24, 0x17	; 23
+  ee:	81 60       	ori	r24, 0x01	; 1
+  f0:	87 bb       	out	0x17, r24	; 23
+  f2:	08 95       	ret
 
-000000fa <USART1_transmit>:
+000000f4 <USART1_transmit>:
 }
 
 void USART1_transmit(char data)
 {
 	while (!(UCSR1A & (1 << UDRE1)));  // wait until UDRE is empty
-  fa:	15 9b       	sbis	0x02, 5	; 2
-  fc:	fe cf       	rjmp	.-4      	; 0xfa <USART1_transmit>
+  f4:	15 9b       	sbis	0x02, 5	; 2
+  f6:	fe cf       	rjmp	.-4      	; 0xf4 <USART1_transmit>
 	UDR1 = data;  // send data
-  fe:	83 b9       	out	0x03, r24	; 3
- 100:	08 95       	ret
+  f8:	83 b9       	out	0x03, r24	; 3
+  fa:	08 95       	ret
 
-00000102 <USART1_receive>:
+000000fc <USART1_receive>:
 }
 
 
 char USART1_receive(void)
 {
-	while (!(UCSR1A & (1 << RXC1)));  // wait until data is received
- 102:	17 9b       	sbis	0x02, 7	; 2
- 104:	fe cf       	rjmp	.-4      	; 0x102 <USART1_receive>
+	while (!(UCSR1A & (1 << RXC1)));  // wait until data is received completely
+  fc:	17 9b       	sbis	0x02, 7	; 2
+  fe:	fe cf       	rjmp	.-4      	; 0xfc <USART1_receive>
 	return UDR1;  // return data
- 106:	83 b1       	in	r24, 0x03	; 3
+ 100:	83 b1       	in	r24, 0x03	; 3
 }
- 108:	08 95       	ret
+ 102:	08 95       	ret
 
-0000010a <set_servo_position>:
+00000104 <set_servo_position>:
 
 
 void set_servo_position(enum servo_states servo_state)
 {
 	// 22.5 value for neutral position, less than that for latch position, greater than that for unlatch position
 	switch (servo_state)
- 10a:	88 23       	and	r24, r24
- 10c:	19 f0       	breq	.+6      	; 0x114 <set_servo_position+0xa>
- 10e:	81 30       	cpi	r24, 0x01	; 1
- 110:	21 f0       	breq	.+8      	; 0x11a <set_servo_position+0x10>
- 112:	08 95       	ret
+ 104:	88 23       	and	r24, r24
+ 106:	19 f0       	breq	.+6      	; 0x10e <set_servo_position+0xa>
+ 108:	81 30       	cpi	r24, 0x01	; 1
+ 10a:	21 f0       	breq	.+8      	; 0x114 <set_servo_position+0x10>
+ 10c:	08 95       	ret
 	{
 		case latch:
 			OCR0 = 10;
- 114:	8a e0       	ldi	r24, 0x0A	; 10
- 116:	81 bf       	out	0x31, r24	; 49
+ 10e:	8a e0       	ldi	r24, 0x0A	; 10
+ 110:	81 bf       	out	0x31, r24	; 49
 			break;
- 118:	08 95       	ret
+ 112:	08 95       	ret
 		case unlatch:
 			OCR0 = 40;
- 11a:	88 e2       	ldi	r24, 0x28	; 40
- 11c:	81 bf       	out	0x31, r24	; 49
- 11e:	08 95       	ret
+ 114:	88 e2       	ldi	r24, 0x28	; 40
+ 116:	81 bf       	out	0x31, r24	; 49
+ 118:	08 95       	ret
 
-00000120 <main>:
+0000011a <main>:
 char USART1_receive(void);
 void set_servo_position(enum servo_states servo_state);
 
 
 int main(void)
 {
- 120:	cf 93       	push	r28
- 122:	df 93       	push	r29
- 124:	cd b7       	in	r28, 0x3d	; 61
- 126:	de b7       	in	r29, 0x3e	; 62
- 128:	2b 97       	sbiw	r28, 0x0b	; 11
- 12a:	0f b6       	in	r0, 0x3f	; 63
- 12c:	f8 94       	cli
- 12e:	de bf       	out	0x3e, r29	; 62
- 130:	0f be       	out	0x3f, r0	; 63
- 132:	cd bf       	out	0x3d, r28	; 61
+ 11a:	cf 93       	push	r28
+ 11c:	df 93       	push	r29
+ 11e:	cd b7       	in	r28, 0x3d	; 61
+ 120:	de b7       	in	r29, 0x3e	; 62
+ 122:	2b 97       	sbiw	r28, 0x0b	; 11
+ 124:	0f b6       	in	r0, 0x3f	; 63
+ 126:	f8 94       	cli
+ 128:	de bf       	out	0x3e, r29	; 62
+ 12a:	0f be       	out	0x3f, r0	; 63
+ 12c:	cd bf       	out	0x3d, r28	; 61
 	// initializations
 	USART1_init();  // initialize USART1
- 134:	0e 94 57 00 	call	0xae	; 0xae <USART1_init>
+ 12e:	0e 94 57 00 	call	0xae	; 0xae <USART1_init>
 	timer0_fastpwm_init();  // initialize timer / pwm
- 138:	0e 94 6a 00 	call	0xd4	; 0xd4 <timer0_fastpwm_init>
+ 132:	0e 94 6a 00 	call	0xd4	; 0xd4 <timer0_fastpwm_init>
 	set_servo_position(latch);  // set servo to latch position
- 13c:	80 e0       	ldi	r24, 0x00	; 0
- 13e:	0e 94 85 00 	call	0x10a	; 0x10a <set_servo_position>
+ 136:	80 e0       	ldi	r24, 0x00	; 0
+ 138:	0e 94 82 00 	call	0x104	; 0x104 <set_servo_position>
 
 	DDRD &= ~(1 << PD7);  // set port D pin 7 as input (for push button)
- 142:	81 b3       	in	r24, 0x11	; 17
- 144:	8f 77       	andi	r24, 0x7F	; 127
- 146:	81 bb       	out	0x11, r24	; 17
-	PORTD &= ~(1 << PD7);
- 148:	82 b3       	in	r24, 0x12	; 18
- 14a:	8f 77       	andi	r24, 0x7F	; 127
- 14c:	82 bb       	out	0x12, r24	; 18
-	
-	char x = 0x00;
+ 13c:	81 b3       	in	r24, 0x11	; 17
+ 13e:	8f 77       	andi	r24, 0x7F	; 127
+ 140:	81 bb       	out	0x11, r24	; 17
+		
 	char password[PASSWORD_LENGTH + 1] = ""; // password received from other microcontroller
- 14e:	1a 82       	std	Y+2, r1	; 0x02
- 150:	19 82       	std	Y+1, r1	; 0x01
- 152:	fe 01       	movw	r30, r28
- 154:	33 96       	adiw	r30, 0x03	; 3
- 156:	89 e0       	ldi	r24, 0x09	; 9
- 158:	df 01       	movw	r26, r30
- 15a:	1d 92       	st	X+, r1
- 15c:	8a 95       	dec	r24
- 15e:	e9 f7       	brne	.-6      	; 0x15a <main+0x3a>
+ 142:	1a 82       	std	Y+2, r1	; 0x02
+ 144:	19 82       	std	Y+1, r1	; 0x01
+ 146:	fe 01       	movw	r30, r28
+ 148:	33 96       	adiw	r30, 0x03	; 3
+ 14a:	89 e0       	ldi	r24, 0x09	; 9
+ 14c:	df 01       	movw	r26, r30
+ 14e:	1d 92       	st	X+, r1
+ 150:	8a 95       	dec	r24
+ 152:	e9 f7       	brne	.-6      	; 0x14e <main+0x34>
 	int chars_entered = 0;  // number of characters recieved
- 160:	00 e0       	ldi	r16, 0x00	; 0
- 162:	10 e0       	ldi	r17, 0x00	; 0
+ 154:	00 e0       	ldi	r16, 0x00	; 0
+ 156:	10 e0       	ldi	r17, 0x00	; 0
 	while (2 + 2 == 4)
 	{
 	
 		switch (CURRENT_STATE)
- 164:	80 91 06 01 	lds	r24, 0x0106	; 0x800106 <__data_end>
- 168:	81 30       	cpi	r24, 0x01	; 1
- 16a:	e1 f0       	breq	.+56     	; 0x1a4 <main+0x84>
- 16c:	18 f0       	brcs	.+6      	; 0x174 <main+0x54>
- 16e:	82 30       	cpi	r24, 0x02	; 2
- 170:	39 f1       	breq	.+78     	; 0x1c0 <main+0xa0>
- 172:	43 c0       	rjmp	.+134    	; 0x1fa <main+0xda>
+ 158:	80 91 06 01 	lds	r24, 0x0106	; 0x800106 <__data_end>
+ 15c:	81 30       	cpi	r24, 0x01	; 1
+ 15e:	e1 f0       	breq	.+56     	; 0x198 <main+0x7e>
+ 160:	18 f0       	brcs	.+6      	; 0x168 <main+0x4e>
+ 162:	82 30       	cpi	r24, 0x02	; 2
+ 164:	21 f1       	breq	.+72     	; 0x1ae <main+0x94>
+ 166:	40 c0       	rjmp	.+128    	; 0x1e8 <main+0xce>
 		{
 
 			case locked:
 
 				set_servo_position(latch);  // set servo to latch position
- 174:	80 e0       	ldi	r24, 0x00	; 0
- 176:	0e 94 85 00 	call	0x10a	; 0x10a <set_servo_position>
+ 168:	80 e0       	ldi	r24, 0x00	; 0
+ 16a:	0e 94 82 00 	call	0x104	; 0x104 <set_servo_position>
 				
 				// recieve password from other microcontroller
 				while (chars_entered < PASSWORD_LENGTH)
- 17a:	0d c0       	rjmp	.+26     	; 0x196 <main+0x76>
+ 16e:	0d c0       	rjmp	.+26     	; 0x18a <main+0x70>
 				{
 					char received_char = USART1_receive();
- 17c:	0e 94 81 00 	call	0x102	; 0x102 <USART1_receive>
+ 170:	0e 94 7e 00 	call	0xfc	; 0xfc <USART1_receive>
 					if (received_char == '*')
- 180:	8a 32       	cpi	r24, 0x2A	; 42
- 182:	61 f0       	breq	.+24     	; 0x19c <main+0x7c>
+ 174:	8a 32       	cpi	r24, 0x2A	; 42
+ 176:	61 f0       	breq	.+24     	; 0x190 <main+0x76>
 					{
 						break;  // break while loop
 					}
 					password[chars_entered] = received_char;
- 184:	e1 e0       	ldi	r30, 0x01	; 1
- 186:	f0 e0       	ldi	r31, 0x00	; 0
- 188:	ec 0f       	add	r30, r28
- 18a:	fd 1f       	adc	r31, r29
- 18c:	e0 0f       	add	r30, r16
- 18e:	f1 1f       	adc	r31, r17
- 190:	80 83       	st	Z, r24
+ 178:	e1 e0       	ldi	r30, 0x01	; 1
+ 17a:	f0 e0       	ldi	r31, 0x00	; 0
+ 17c:	ec 0f       	add	r30, r28
+ 17e:	fd 1f       	adc	r31, r29
+ 180:	e0 0f       	add	r30, r16
+ 182:	f1 1f       	adc	r31, r17
+ 184:	80 83       	st	Z, r24
 					chars_entered++;
- 192:	0f 5f       	subi	r16, 0xFF	; 255
- 194:	1f 4f       	sbci	r17, 0xFF	; 255
+ 186:	0f 5f       	subi	r16, 0xFF	; 255
+ 188:	1f 4f       	sbci	r17, 0xFF	; 255
 			case locked:
 
 				set_servo_position(latch);  // set servo to latch position
 				
 				// recieve password from other microcontroller
 				while (chars_entered < PASSWORD_LENGTH)
- 196:	0a 30       	cpi	r16, 0x0A	; 10
- 198:	11 05       	cpc	r17, r1
- 19a:	84 f3       	brlt	.-32     	; 0x17c <main+0x5c>
+ 18a:	0a 30       	cpi	r16, 0x0A	; 10
+ 18c:	11 05       	cpc	r17, r1
+ 18e:	84 f3       	brlt	.-32     	; 0x170 <main+0x56>
 					}
 					password[chars_entered] = received_char;
 					chars_entered++;
 				}
 
 				CURRENT_STATE = checking_password;
- 19c:	82 e0       	ldi	r24, 0x02	; 2
- 19e:	80 93 06 01 	sts	0x0106, r24	; 0x800106 <__data_end>
+ 190:	82 e0       	ldi	r24, 0x02	; 2
+ 192:	80 93 06 01 	sts	0x0106, r24	; 0x800106 <__data_end>
 				break;  // break case locked
- 1a2:	2b c0       	rjmp	.+86     	; 0x1fa <main+0xda>
+ 196:	28 c0       	rjmp	.+80     	; 0x1e8 <main+0xce>
 
 			case unlocked:
-				set_servo_position(unlatch);  // set servo to unlatch position
- 1a4:	81 e0       	ldi	r24, 0x01	; 1
- 1a6:	0e 94 85 00 	call	0x10a	; 0x10a <set_servo_position>
+				set_servo_position(unlatch);  // set servo to unlatch 
+ 198:	81 e0       	ldi	r24, 0x01	; 1
+ 19a:	0e 94 82 00 	call	0x104	; 0x104 <set_servo_position>
 				
-				do 
-				{
-					x = (PIND & (1 << PD7)) >> 7;  // read port D pin 7
-				} while (x == 0x00);
- 1aa:	87 9b       	sbis	0x10, 7	; 16
- 1ac:	fe cf       	rjmp	.-4      	; 0x1aa <main+0x8a>
-				x = 
- 1ae:	82 b3       	in	r24, 0x12	; 18
- 1b0:	8f 77       	andi	r24, 0x7F	; 127
-				PORTD &= ~(1 << PD7);
- 1b2:	82 bb       	out	0x12, r24	; 18
-				
-				USART1_transmit('L');
- 1b4:	8c e4       	ldi	r24, 0x4C	; 76
- 1b6:	0e 94 7d 00 	call	0xfa	; 0xfa <USART1_transmit>
+				while (!(PIND & (1 << PD7)));  // wait for push button to be pressed (polling)
+ 19e:	87 9b       	sbis	0x10, 7	; 16
+ 1a0:	fe cf       	rjmp	.-4      	; 0x19e <main+0x84>
+
+				USART1_transmit('L');  // signal other microcontroller that lock is latched
+ 1a2:	8c e4       	ldi	r24, 0x4C	; 76
+ 1a4:	0e 94 7a 00 	call	0xf4	; 0xf4 <USART1_transmit>
 
 				CURRENT_STATE = locked;  // go to locked state
- 1ba:	10 92 06 01 	sts	0x0106, r1	; 0x800106 <__data_end>
+ 1a8:	10 92 06 01 	sts	0x0106, r1	; 0x800106 <__data_end>
 				break;  // break case unlocked
- 1be:	1d c0       	rjmp	.+58     	; 0x1fa <main+0xda>
+ 1ac:	1d c0       	rjmp	.+58     	; 0x1e8 <main+0xce>
 
 			case checking_password:
 				if (strcmp(password, CORRECT_PASSWORD) == 0)
- 1c0:	60 e0       	ldi	r22, 0x00	; 0
- 1c2:	71 e0       	ldi	r23, 0x01	; 1
- 1c4:	ce 01       	movw	r24, r28
- 1c6:	01 96       	adiw	r24, 0x01	; 1
- 1c8:	0e 94 04 01 	call	0x208	; 0x208 <strcmp>
- 1cc:	89 2b       	or	r24, r25
- 1ce:	39 f4       	brne	.+14     	; 0x1de <main+0xbe>
+ 1ae:	60 e0       	ldi	r22, 0x00	; 0
+ 1b0:	71 e0       	ldi	r23, 0x01	; 1
+ 1b2:	ce 01       	movw	r24, r28
+ 1b4:	01 96       	adiw	r24, 0x01	; 1
+ 1b6:	0e 94 fb 00 	call	0x1f6	; 0x1f6 <strcmp>
+ 1ba:	89 2b       	or	r24, r25
+ 1bc:	39 f4       	brne	.+14     	; 0x1cc <main+0xb2>
 				{
 					// send unlocked status to other microcontroller (correct password)
 					USART1_transmit('1');
- 1d0:	81 e3       	ldi	r24, 0x31	; 49
- 1d2:	0e 94 7d 00 	call	0xfa	; 0xfa <USART1_transmit>
+ 1be:	81 e3       	ldi	r24, 0x31	; 49
+ 1c0:	0e 94 7a 00 	call	0xf4	; 0xf4 <USART1_transmit>
 					CURRENT_STATE = unlocked;
- 1d6:	81 e0       	ldi	r24, 0x01	; 1
- 1d8:	80 93 06 01 	sts	0x0106, r24	; 0x800106 <__data_end>
- 1dc:	05 c0       	rjmp	.+10     	; 0x1e8 <main+0xc8>
+ 1c4:	81 e0       	ldi	r24, 0x01	; 1
+ 1c6:	80 93 06 01 	sts	0x0106, r24	; 0x800106 <__data_end>
+ 1ca:	05 c0       	rjmp	.+10     	; 0x1d6 <main+0xbc>
 				}
 				else
 				{
 					// send locked status to other microcontroller (incorrect password)
 					USART1_transmit('0');
- 1de:	80 e3       	ldi	r24, 0x30	; 48
- 1e0:	0e 94 7d 00 	call	0xfa	; 0xfa <USART1_transmit>
+ 1cc:	80 e3       	ldi	r24, 0x30	; 48
+ 1ce:	0e 94 7a 00 	call	0xf4	; 0xf4 <USART1_transmit>
 					CURRENT_STATE = locked;
- 1e4:	10 92 06 01 	sts	0x0106, r1	; 0x800106 <__data_end>
+ 1d2:	10 92 06 01 	sts	0x0106, r1	; 0x800106 <__data_end>
 				}
 
 				//  reset password and number of characters entered
 				chars_entered = 0;
 				memset(password, 0, PASSWORD_LENGTH);  // clear password array
- 1e8:	fe 01       	movw	r30, r28
- 1ea:	31 96       	adiw	r30, 0x01	; 1
- 1ec:	8a e0       	ldi	r24, 0x0A	; 10
- 1ee:	df 01       	movw	r26, r30
- 1f0:	1d 92       	st	X+, r1
- 1f2:	8a 95       	dec	r24
- 1f4:	e9 f7       	brne	.-6      	; 0x1f0 <main+0xd0>
+ 1d6:	fe 01       	movw	r30, r28
+ 1d8:	31 96       	adiw	r30, 0x01	; 1
+ 1da:	8a e0       	ldi	r24, 0x0A	; 10
+ 1dc:	df 01       	movw	r26, r30
+ 1de:	1d 92       	st	X+, r1
+ 1e0:	8a 95       	dec	r24
+ 1e2:	e9 f7       	brne	.-6      	; 0x1de <main+0xc4>
 					USART1_transmit('0');
 					CURRENT_STATE = locked;
 				}
 
 				//  reset password and number of characters entered
 				chars_entered = 0;
- 1f6:	00 e0       	ldi	r16, 0x00	; 0
- 1f8:	10 e0       	ldi	r17, 0x00	; 0
+ 1e4:	00 e0       	ldi	r16, 0x00	; 0
+ 1e6:	10 e0       	ldi	r17, 0x00	; 0
 	#else
 		//round up by default
 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
 	#endif
 
 	__builtin_avr_delay_cycles(__ticks_dc);
- 1fa:	8f e4       	ldi	r24, 0x4F	; 79
- 1fc:	93 ec       	ldi	r25, 0xC3	; 195
- 1fe:	01 97       	sbiw	r24, 0x01	; 1
- 200:	f1 f7       	brne	.-4      	; 0x1fe <main+0xde>
- 202:	00 c0       	rjmp	.+0      	; 0x204 <__EEPROM_REGION_LENGTH__+0x4>
- 204:	00 00       	nop
- 206:	ae cf       	rjmp	.-164    	; 0x164 <main+0x44>
+ 1e8:	8f e4       	ldi	r24, 0x4F	; 79
+ 1ea:	93 ec       	ldi	r25, 0xC3	; 195
+ 1ec:	01 97       	sbiw	r24, 0x01	; 1
+ 1ee:	f1 f7       	brne	.-4      	; 0x1ec <main+0xd2>
+ 1f0:	00 c0       	rjmp	.+0      	; 0x1f2 <main+0xd8>
+ 1f2:	00 00       	nop
+ 1f4:	b1 cf       	rjmp	.-158    	; 0x158 <main+0x3e>
 
-00000208 <strcmp>:
- 208:	fb 01       	movw	r30, r22
- 20a:	dc 01       	movw	r26, r24
- 20c:	8d 91       	ld	r24, X+
- 20e:	01 90       	ld	r0, Z+
- 210:	80 19       	sub	r24, r0
- 212:	01 10       	cpse	r0, r1
- 214:	d9 f3       	breq	.-10     	; 0x20c <strcmp+0x4>
- 216:	99 0b       	sbc	r25, r25
- 218:	08 95       	ret
+000001f6 <strcmp>:
+ 1f6:	fb 01       	movw	r30, r22
+ 1f8:	dc 01       	movw	r26, r24
+ 1fa:	8d 91       	ld	r24, X+
+ 1fc:	01 90       	ld	r0, Z+
+ 1fe:	80 19       	sub	r24, r0
+ 200:	01 10       	cpse	r0, r1
+ 202:	d9 f3       	breq	.-10     	; 0x1fa <strcmp+0x4>
+ 204:	99 0b       	sbc	r25, r25
+ 206:	08 95       	ret
 
-0000021a <_exit>:
- 21a:	f8 94       	cli
+00000208 <_exit>:
+ 208:	f8 94       	cli
 
-0000021c <__stop_program>:
- 21c:	ff cf       	rjmp	.-2      	; 0x21c <__stop_program>
+0000020a <__stop_program>:
+ 20a:	ff cf       	rjmp	.-2      	; 0x20a <__stop_program>
