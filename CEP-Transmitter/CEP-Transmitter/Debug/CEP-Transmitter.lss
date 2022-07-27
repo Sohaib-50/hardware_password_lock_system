@@ -3,31 +3,31 @@ CEP-Transmitter.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000000  00800100  00800100  000001a8  2**0
+  0 .data         00000000  00800100  00800100  0000033e  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         00000134  00000000  00000000  00000074  2**1
+  1 .text         000002ca  00000000  00000000  00000074  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .bss          00000001  00800100  00800100  000001a8  2**0
+  2 .bss          00000001  00800100  00800100  0000033e  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  000001a8  2**0
+  3 .comment      00000030  00000000  00000000  0000033e  2**0
                   CONTENTS, READONLY
-  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000001d8  2**2
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000370  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 00000030  00000000  00000000  00000214  2**0
+  5 .debug_aranges 00000050  00000000  00000000  000003ac  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   000007c0  00000000  00000000  00000244  2**0
+  6 .debug_info   00000946  00000000  00000000  000003fc  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 000006c6  00000000  00000000  00000a04  2**0
+  7 .debug_abbrev 00000768  00000000  00000000  00000d42  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   00000312  00000000  00000000  000010ca  2**0
+  8 .debug_line   00000474  00000000  00000000  000014aa  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000044  00000000  00000000  000013dc  2**2
+  9 .debug_frame  00000094  00000000  00000000  00001920  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    000003f6  00000000  00000000  00001420  2**0
+ 10 .debug_str    000004be  00000000  00000000  000019b4  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    000000c4  00000000  00000000  00001816  2**0
+ 11 .debug_loc    0000022b  00000000  00000000  00001e72  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000020  00000000  00000000  000018da  2**0
+ 12 .debug_ranges 00000040  00000000  00000000  0000209d  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -83,8 +83,8 @@ Disassembly of section .text:
   86:	a1 30       	cpi	r26, 0x01	; 1
   88:	b2 07       	cpc	r27, r18
   8a:	e1 f7       	brne	.-8      	; 0x84 <.do_clear_bss_loop>
-  8c:	0e 94 69 00 	call	0xd2	; 0xd2 <main>
-  90:	0c 94 98 00 	jmp	0x130	; 0x130 <_exit>
+  8c:	0e 94 92 00 	call	0x124	; 0x124 <main>
+  90:	0c 94 63 01 	jmp	0x2c6	; 0x2c6 <_exit>
 
 00000094 <__bad_interrupt>:
   94:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
@@ -143,92 +143,445 @@ void USART1_init(void)
   ce:	81 b9       	out	0x01, r24	; 1
   d0:	08 95       	ret
 
-000000d2 <main>:
+000000d2 <get_seven_segment_code>:
+
+
+char get_seven_segment_code(char data)
+{
+	char seven_segment_code = 0;
+	switch (data)
+  d2:	85 34       	cpi	r24, 0x45	; 69
+  d4:	51 f0       	breq	.+20     	; 0xea <get_seven_segment_code+0x18>
+  d6:	18 f4       	brcc	.+6      	; 0xde <get_seven_segment_code+0xc>
+  d8:	83 34       	cpi	r24, 0x43	; 67
+  da:	69 f0       	breq	.+26     	; 0xf6 <get_seven_segment_code+0x24>
+  dc:	04 c0       	rjmp	.+8      	; 0xe6 <get_seven_segment_code+0x14>
+  de:	8c 34       	cpi	r24, 0x4C	; 76
+  e0:	41 f0       	breq	.+16     	; 0xf2 <get_seven_segment_code+0x20>
+  e2:	85 35       	cpi	r24, 0x55	; 85
+  e4:	21 f0       	breq	.+8      	; 0xee <get_seven_segment_code+0x1c>
+}
+
+
+char get_seven_segment_code(char data)
+{
+	char seven_segment_code = 0;
+  e6:	80 e0       	ldi	r24, 0x00	; 0
+  e8:	08 95       	ret
+	{
+		case 'C':  // Checking password state
+			seven_segment_code = 0b11000110;  // turn on a, f, e, d of seven segment display
+			break;
+		case 'E':  //  Entering password state
+			seven_segment_code = 0b10000110;  // turn on a, f, e, d, g of seven segment display
+  ea:	86 e8       	ldi	r24, 0x86	; 134
+			break;
+  ec:	08 95       	ret
+		case 'U':  // Unlocked state
+			seven_segment_code = 0b11000001;  // turn on b, c, d, e, f of seven segment display
+  ee:	81 ec       	ldi	r24, 0xC1	; 193
+			break;
+  f0:	08 95       	ret
+		case 'L':  // Locked state
+			seven_segment_code = 0b11000111;  // d, e, f of seven segment display
+  f2:	87 ec       	ldi	r24, 0xC7	; 199
+			break;
+  f4:	08 95       	ret
+{
+	char seven_segment_code = 0;
+	switch (data)
+	{
+		case 'C':  // Checking password state
+			seven_segment_code = 0b11000110;  // turn on a, f, e, d of seven segment display
+  f6:	86 ec       	ldi	r24, 0xC6	; 198
+		case 'L':  // Locked state
+			seven_segment_code = 0b11000111;  // d, e, f of seven segment display
+			break;
+	}
+	return seven_segment_code;
+}
+  f8:	08 95       	ret
+
+000000fa <get_keypad_position>:
+
+int get_keypad_position(void)
+{
+	char data_available;
+	int data;
+	PORTB &= ~(1 << PB1);  // set port B bit 1 as 0 to enable OE' of of keypad decoder IC
+  fa:	88 b3       	in	r24, 0x18	; 24
+  fc:	8d 7f       	andi	r24, 0xFD	; 253
+  fe:	88 bb       	out	0x18, r24	; 24
+	data_available = PINC;
+ 100:	83 b3       	in	r24, 0x13	; 19
+	if (data_available == 0x01)
+ 102:	81 30       	cpi	r24, 0x01	; 1
+ 104:	21 f4       	brne	.+8      	; 0x10e <get_keypad_position+0x14>
+	{
+		data = (PIND & 0x0F);  // read data from port D bits 0 to 3
+ 106:	80 b3       	in	r24, 0x10	; 16
+ 108:	8f 70       	andi	r24, 0x0F	; 15
+ 10a:	90 e0       	ldi	r25, 0x00	; 0
+		return data;
+ 10c:	08 95       	ret
+	}
+	return 16;  // default value
+ 10e:	80 e1       	ldi	r24, 0x10	; 16
+ 110:	90 e0       	ldi	r25, 0x00	; 0
+}
+ 112:	08 95       	ret
+
+00000114 <USART1_transmit>:
+
+
+void USART1_transmit(char data)
+{
+	while (!(UCSR1A & (1 << UDRE1)));  // wait until UDRE is empty
+ 114:	15 9b       	sbis	0x02, 5	; 2
+ 116:	fe cf       	rjmp	.-4      	; 0x114 <USART1_transmit>
+	UDR1 = data;  // send data
+ 118:	83 b9       	out	0x03, r24	; 3
+ 11a:	08 95       	ret
+
+0000011c <USART1_receive>:
+}
+
+
+char USART1_receive(void)
+{
+	while (!(UCSR1A & (1 << RXC1)));  // wait until data is received
+ 11c:	17 9b       	sbis	0x02, 7	; 2
+ 11e:	fe cf       	rjmp	.-4      	; 0x11c <USART1_receive>
+	return UDR1;  // return data
+ 120:	83 b1       	in	r24, 0x03	; 3
+ 122:	08 95       	ret
+
+00000124 <main>:
+char USART1_receive(void);
+
 
 
 int main(void)
 {
+ 124:	cf 93       	push	r28
+ 126:	df 93       	push	r29
+ 128:	cd b7       	in	r28, 0x3d	; 61
+ 12a:	de b7       	in	r29, 0x3e	; 62
+ 12c:	6f 97       	sbiw	r28, 0x1f	; 31
+ 12e:	0f b6       	in	r0, 0x3f	; 63
+ 130:	f8 94       	cli
+ 132:	de bf       	out	0x3e, r29	; 62
+ 134:	0f be       	out	0x3f, r0	; 63
+ 136:	cd bf       	out	0x3d, r28	; 61
 	// initializations
 	USART1_init();  // initialize USART1
-  d2:	0e 94 56 00 	call	0xac	; 0xac <USART1_init>
+ 138:	0e 94 56 00 	call	0xac	; 0xac <USART1_init>
 	// set_USART1_mode(transmitter);  // set USART1 to transmitter mode
 	keypad_init();  // initialize keypad
-  d6:	0e 94 4c 00 	call	0x98	; 0x98 <keypad_init>
+ 13c:	0e 94 4c 00 	call	0x98	; 0x98 <keypad_init>
 
-	DDRC = 0xFF; // set port C as output
-  da:	8f ef       	ldi	r24, 0xFF	; 255
-  dc:	84 bb       	out	0x14, r24	; 20
-	char receiveData;
+	DDRA = 0xFF;  // set port A as output (for seven segment display)
+ 140:	8f ef       	ldi	r24, 0xFF	; 255
+ 142:	8a bb       	out	0x1a, r24	; 26
 
-	while (1)
+	char keypad_chars[20] = {'1', '2', '3', 'A', '4', '5', '6', 'B', '7', '8', '9', 'C', '*', '0', '#', 'D', '\0'};
+ 144:	fe 01       	movw	r30, r28
+ 146:	31 96       	adiw	r30, 0x01	; 1
+ 148:	84 e1       	ldi	r24, 0x14	; 20
+ 14a:	df 01       	movw	r26, r30
+ 14c:	1d 92       	st	X+, r1
+ 14e:	8a 95       	dec	r24
+ 150:	e9 f7       	brne	.-6      	; 0x14c <main+0x28>
+ 152:	81 e3       	ldi	r24, 0x31	; 49
+ 154:	89 83       	std	Y+1, r24	; 0x01
+ 156:	82 e3       	ldi	r24, 0x32	; 50
+ 158:	8a 83       	std	Y+2, r24	; 0x02
+ 15a:	83 e3       	ldi	r24, 0x33	; 51
+ 15c:	8b 83       	std	Y+3, r24	; 0x03
+ 15e:	81 e4       	ldi	r24, 0x41	; 65
+ 160:	8c 83       	std	Y+4, r24	; 0x04
+ 162:	84 e3       	ldi	r24, 0x34	; 52
+ 164:	8d 83       	std	Y+5, r24	; 0x05
+ 166:	85 e3       	ldi	r24, 0x35	; 53
+ 168:	8e 83       	std	Y+6, r24	; 0x06
+ 16a:	86 e3       	ldi	r24, 0x36	; 54
+ 16c:	8f 83       	std	Y+7, r24	; 0x07
+ 16e:	82 e4       	ldi	r24, 0x42	; 66
+ 170:	88 87       	std	Y+8, r24	; 0x08
+ 172:	87 e3       	ldi	r24, 0x37	; 55
+ 174:	89 87       	std	Y+9, r24	; 0x09
+ 176:	88 e3       	ldi	r24, 0x38	; 56
+ 178:	8a 87       	std	Y+10, r24	; 0x0a
+ 17a:	89 e3       	ldi	r24, 0x39	; 57
+ 17c:	8b 87       	std	Y+11, r24	; 0x0b
+ 17e:	83 e4       	ldi	r24, 0x43	; 67
+ 180:	8c 87       	std	Y+12, r24	; 0x0c
+ 182:	8a e2       	ldi	r24, 0x2A	; 42
+ 184:	8d 87       	std	Y+13, r24	; 0x0d
+ 186:	80 e3       	ldi	r24, 0x30	; 48
+ 188:	8e 87       	std	Y+14, r24	; 0x0e
+ 18a:	83 e2       	ldi	r24, 0x23	; 35
+ 18c:	8f 87       	std	Y+15, r24	; 0x0f
+ 18e:	84 e4       	ldi	r24, 0x44	; 68
+ 190:	88 8b       	std	Y+16, r24	; 0x10
+	int key_position;
+	char char_entered, password_correct_response;
+	int chars_entered = 0;  // number of characters entered in the password so far
+	char password[PASSWORD_LENGTH + 1] = ""; // password entered by the user
+ 192:	1e 8a       	std	Y+22, r1	; 0x16
+ 194:	1d 8a       	std	Y+21, r1	; 0x15
+ 196:	76 96       	adiw	r30, 0x16	; 22
+ 198:	89 e0       	ldi	r24, 0x09	; 9
+ 19a:	df 01       	movw	r26, r30
+ 19c:	1d 92       	st	X+, r1
+ 19e:	8a 95       	dec	r24
+ 1a0:	e9 f7       	brne	.-6      	; 0x19c <main+0x78>
+	DDRA = 0xFF;  // set port A as output (for seven segment display)
+
+	char keypad_chars[20] = {'1', '2', '3', 'A', '4', '5', '6', 'B', '7', '8', '9', 'C', '*', '0', '#', 'D', '\0'};
+	int key_position;
+	char char_entered, password_correct_response;
+	int chars_entered = 0;  // number of characters entered in the password so far
+ 1a2:	00 e0       	ldi	r16, 0x00	; 0
+ 1a4:	10 e0       	ldi	r17, 0x00	; 0
+	char password[PASSWORD_LENGTH + 1] = ""; // password entered by the user
+
+	while (-10 < 10)
 	{
 		switch (CURRENT_STATE)
-  de:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <__DATA_REGION_ORIGIN__>
-  e2:	88 23       	and	r24, r24
-  e4:	19 f0       	breq	.+6      	; 0xec <main+0x1a>
-  e6:	81 30       	cpi	r24, 0x01	; 1
-  e8:	99 f0       	breq	.+38     	; 0x110 <main+0x3e>
-  ea:	f9 cf       	rjmp	.-14     	; 0xde <main+0xc>
+ 1a6:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <__DATA_REGION_ORIGIN__>
+ 1aa:	81 30       	cpi	r24, 0x01	; 1
+ 1ac:	81 f1       	breq	.+96     	; 0x20e <__EEPROM_REGION_LENGTH__+0xe>
+ 1ae:	38 f0       	brcs	.+14     	; 0x1be <main+0x9a>
+ 1b0:	82 30       	cpi	r24, 0x02	; 2
+ 1b2:	09 f4       	brne	.+2      	; 0x1b6 <main+0x92>
+ 1b4:	64 c0       	rjmp	.+200    	; 0x27e <__EEPROM_REGION_LENGTH__+0x7e>
+ 1b6:	83 30       	cpi	r24, 0x03	; 3
+ 1b8:	09 f4       	brne	.+2      	; 0x1bc <main+0x98>
+ 1ba:	74 c0       	rjmp	.+232    	; 0x2a4 <__EEPROM_REGION_LENGTH__+0xa4>
+ 1bc:	7d c0       	rjmp	.+250    	; 0x2b8 <__EEPROM_REGION_LENGTH__+0xb8>
 		{
+
 			case entering_password:
-				PORTC = 0x00;
-  ec:	15 ba       	out	0x15, r1	; 21
-				char y=0b10101010;
+				PORTA = get_seven_segment_code('E');  // show "E" on the seven segment display
+ 1be:	85 e4       	ldi	r24, 0x45	; 69
+ 1c0:	0e 94 69 00 	call	0xd2	; 0xd2 <get_seven_segment_code>
+ 1c4:	8b bb       	out	0x1b, r24	; 27
+				
+				// if password is full, go to checking_password state
+				if (chars_entered == PASSWORD_LENGTH)
+ 1c6:	0a 30       	cpi	r16, 0x0A	; 10
+ 1c8:	11 05       	cpc	r17, r1
+ 1ca:	21 f4       	brne	.+8      	; 0x1d4 <main+0xb0>
 				{
-					while(!(UCSR1A&(1<<UDRE1)));
-  ee:	15 9b       	sbis	0x02, 5	; 2
-  f0:	fe cf       	rjmp	.-4      	; 0xee <main+0x1c>
-					UDR1 = y;
-  f2:	8a ea       	ldi	r24, 0xAA	; 170
-  f4:	83 b9       	out	0x03, r24	; 3
+					CURRENT_STATE = checking_password;
+ 1cc:	81 e0       	ldi	r24, 0x01	; 1
+ 1ce:	80 93 00 01 	sts	0x0100, r24	; 0x800100 <__DATA_REGION_ORIGIN__>
+					break;
+ 1d2:	72 c0       	rjmp	.+228    	; 0x2b8 <__EEPROM_REGION_LENGTH__+0xb8>
+				}
+				
+				key_position = get_keypad_position();  // get position of key pressed
+ 1d4:	0e 94 7d 00 	call	0xfa	; 0xfa <get_keypad_position>
+				char_entered = keypad_chars[key_position];
+ 1d8:	e1 e0       	ldi	r30, 0x01	; 1
+ 1da:	f0 e0       	ldi	r31, 0x00	; 0
+ 1dc:	ec 0f       	add	r30, r28
+ 1de:	fd 1f       	adc	r31, r29
+ 1e0:	8e 0f       	add	r24, r30
+ 1e2:	9f 1f       	adc	r25, r31
+ 1e4:	dc 01       	movw	r26, r24
+ 1e6:	8c 91       	ld	r24, X
+				if (char_entered == '\0')
+ 1e8:	88 23       	and	r24, r24
+ 1ea:	09 f4       	brne	.+2      	; 0x1ee <main+0xca>
+ 1ec:	65 c0       	rjmp	.+202    	; 0x2b8 <__EEPROM_REGION_LENGTH__+0xb8>
+				{
+					break;
+				}
+				else if (char_entered == '*')  // if * key pressed, go to checking_password state
+ 1ee:	8a 32       	cpi	r24, 0x2A	; 42
+ 1f0:	21 f4       	brne	.+8      	; 0x1fa <main+0xd6>
+				{
+					CURRENT_STATE = checking_password;  
+ 1f2:	81 e0       	ldi	r24, 0x01	; 1
+ 1f4:	80 93 00 01 	sts	0x0100, r24	; 0x800100 <__DATA_REGION_ORIGIN__>
+ 1f8:	5f c0       	rjmp	.+190    	; 0x2b8 <__EEPROM_REGION_LENGTH__+0xb8>
+				}
+				else
+				{
+					password[chars_entered] = char_entered;  // add character entered to password
+ 1fa:	e5 e1       	ldi	r30, 0x15	; 21
+ 1fc:	f0 e0       	ldi	r31, 0x00	; 0
+ 1fe:	ec 0f       	add	r30, r28
+ 200:	fd 1f       	adc	r31, r29
+ 202:	e0 0f       	add	r30, r16
+ 204:	f1 1f       	adc	r31, r17
+ 206:	80 83       	st	Z, r24
+					chars_entered++;
+ 208:	0f 5f       	subi	r16, 0xFF	; 255
+ 20a:	1f 4f       	sbci	r17, 0xFF	; 255
+ 20c:	55 c0       	rjmp	.+170    	; 0x2b8 <__EEPROM_REGION_LENGTH__+0xb8>
+				}
+				break;
+
+			case checking_password:
+				PORTA = get_seven_segment_code('C');  // show "C" on the seven segment display
+ 20e:	83 e4       	ldi	r24, 0x43	; 67
+ 210:	0e 94 69 00 	call	0xd2	; 0xd2 <get_seven_segment_code>
+ 214:	8b bb       	out	0x1b, r24	; 27
+
+				// send password to other microcontroller via USART1 charater by character
+				for (int i = 0; i < strlen(password); i++)
+ 216:	00 e0       	ldi	r16, 0x00	; 0
+ 218:	10 e0       	ldi	r17, 0x00	; 0
+ 21a:	0b c0       	rjmp	.+22     	; 0x232 <__EEPROM_REGION_LENGTH__+0x32>
+				{
+					USART1_transmit(password[i]);
+ 21c:	e5 e1       	ldi	r30, 0x15	; 21
+ 21e:	f0 e0       	ldi	r31, 0x00	; 0
+ 220:	ec 0f       	add	r30, r28
+ 222:	fd 1f       	adc	r31, r29
+ 224:	e0 0f       	add	r30, r16
+ 226:	f1 1f       	adc	r31, r17
+ 228:	80 81       	ld	r24, Z
+ 22a:	0e 94 8a 00 	call	0x114	; 0x114 <USART1_transmit>
+
+			case checking_password:
+				PORTA = get_seven_segment_code('C');  // show "C" on the seven segment display
+
+				// send password to other microcontroller via USART1 charater by character
+				for (int i = 0; i < strlen(password); i++)
+ 22e:	0f 5f       	subi	r16, 0xFF	; 255
+ 230:	1f 4f       	sbci	r17, 0xFF	; 255
+ 232:	de 01       	movw	r26, r28
+ 234:	55 96       	adiw	r26, 0x15	; 21
+ 236:	fd 01       	movw	r30, r26
+ 238:	01 90       	ld	r0, Z+
+ 23a:	00 20       	and	r0, r0
+ 23c:	e9 f7       	brne	.-6      	; 0x238 <__EEPROM_REGION_LENGTH__+0x38>
+ 23e:	31 97       	sbiw	r30, 0x01	; 1
+ 240:	ea 1b       	sub	r30, r26
+ 242:	fb 0b       	sbc	r31, r27
+ 244:	0e 17       	cp	r16, r30
+ 246:	1f 07       	cpc	r17, r31
+ 248:	48 f3       	brcs	.-46     	; 0x21c <__EEPROM_REGION_LENGTH__+0x1c>
+				{
+					USART1_transmit(password[i]);
+				}
+				USART1_transmit('*');  // send * to  indicate end of password
+ 24a:	8a e2       	ldi	r24, 0x2A	; 42
+ 24c:	0e 94 8a 00 	call	0x114	; 0x114 <USART1_transmit>
+
+				//  reset password and number of characters entered
+				chars_entered = 0;
+				memset(password, 0, PASSWORD_LENGTH);  // clear password array
+ 250:	fe 01       	movw	r30, r28
+ 252:	75 96       	adiw	r30, 0x15	; 21
+ 254:	8a e0       	ldi	r24, 0x0A	; 10
+ 256:	df 01       	movw	r26, r30
+ 258:	1d 92       	st	X+, r1
+ 25a:	8a 95       	dec	r24
+ 25c:	e9 f7       	brne	.-6      	; 0x258 <__EEPROM_REGION_LENGTH__+0x58>
+
+				// recieve response from other microcontroller
+				password_correct_response = USART1_receive();
+ 25e:	0e 94 8e 00 	call	0x11c	; 0x11c <USART1_receive>
+				if (password_correct_response == '1')
+ 262:	81 33       	cpi	r24, 0x31	; 49
+ 264:	31 f4       	brne	.+12     	; 0x272 <__EEPROM_REGION_LENGTH__+0x72>
+				{
+					CURRENT_STATE = correct_password;
+ 266:	83 e0       	ldi	r24, 0x03	; 3
+ 268:	80 93 00 01 	sts	0x0100, r24	; 0x800100 <__DATA_REGION_ORIGIN__>
+					USART1_transmit(password[i]);
+				}
+				USART1_transmit('*');  // send * to  indicate end of password
+
+				//  reset password and number of characters entered
+				chars_entered = 0;
+ 26c:	00 e0       	ldi	r16, 0x00	; 0
+ 26e:	10 e0       	ldi	r17, 0x00	; 0
+ 270:	23 c0       	rjmp	.+70     	; 0x2b8 <__EEPROM_REGION_LENGTH__+0xb8>
+				{
+					CURRENT_STATE = correct_password;
+				}
+				else
+				{
+					CURRENT_STATE = incorrect_password;
+ 272:	82 e0       	ldi	r24, 0x02	; 2
+ 274:	80 93 00 01 	sts	0x0100, r24	; 0x800100 <__DATA_REGION_ORIGIN__>
+					USART1_transmit(password[i]);
+				}
+				USART1_transmit('*');  // send * to  indicate end of password
+
+				//  reset password and number of characters entered
+				chars_entered = 0;
+ 278:	00 e0       	ldi	r16, 0x00	; 0
+ 27a:	10 e0       	ldi	r17, 0x00	; 0
+ 27c:	1d c0       	rjmp	.+58     	; 0x2b8 <__EEPROM_REGION_LENGTH__+0xb8>
+					CURRENT_STATE = incorrect_password;
+				}
+				break;
+
+			case incorrect_password:
+				PORTA = get_seven_segment_code('L');  // show "L" on the seven segment display
+ 27e:	8c e4       	ldi	r24, 0x4C	; 76
+ 280:	0e 94 69 00 	call	0xd2	; 0xd2 <get_seven_segment_code>
+ 284:	8b bb       	out	0x1b, r24	; 27
+				
+				// when * key is pressed 
+				key_position = get_keypad_position();
+ 286:	0e 94 7d 00 	call	0xfa	; 0xfa <get_keypad_position>
+				char_entered = keypad_chars[key_position];
+ 28a:	e1 e0       	ldi	r30, 0x01	; 1
+ 28c:	f0 e0       	ldi	r31, 0x00	; 0
+ 28e:	ec 0f       	add	r30, r28
+ 290:	fd 1f       	adc	r31, r29
+ 292:	8e 0f       	add	r24, r30
+ 294:	9f 1f       	adc	r25, r31
+ 296:	dc 01       	movw	r26, r24
+ 298:	8c 91       	ld	r24, X
+				if (char_entered == '*')
+ 29a:	8a 32       	cpi	r24, 0x2A	; 42
+ 29c:	69 f4       	brne	.+26     	; 0x2b8 <__EEPROM_REGION_LENGTH__+0xb8>
+				{
+					CURRENT_STATE = entering_password;
+ 29e:	10 92 00 01 	sts	0x0100, r1	; 0x800100 <__DATA_REGION_ORIGIN__>
+ 2a2:	0a c0       	rjmp	.+20     	; 0x2b8 <__EEPROM_REGION_LENGTH__+0xb8>
+				}
+				break;
+
+			case correct_password:
+				PORTA = get_seven_segment_code('U');  // show "U" on the seven segment display
+ 2a4:	85 e5       	ldi	r24, 0x55	; 85
+ 2a6:	0e 94 69 00 	call	0xd2	; 0xd2 <get_seven_segment_code>
+ 2aa:	8b bb       	out	0x1b, r24	; 27
+				
+				// wait till other microcontroller sends L to indicate that lock is closed again
+				while (USART1_receive() != 'L');
+ 2ac:	0e 94 8e 00 	call	0x11c	; 0x11c <USART1_receive>
+ 2b0:	8c 34       	cpi	r24, 0x4C	; 76
+ 2b2:	e1 f7       	brne	.-8      	; 0x2ac <__EEPROM_REGION_LENGTH__+0xac>
+
+				CURRENT_STATE = entering_password;
+ 2b4:	10 92 00 01 	sts	0x0100, r1	; 0x800100 <__DATA_REGION_ORIGIN__>
 	#else
 		//round up by default
 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
 	#endif
 
 	__builtin_avr_delay_cycles(__ticks_dc);
-  f6:	2f e3       	ldi	r18, 0x3F	; 63
-  f8:	8d e0       	ldi	r24, 0x0D	; 13
-  fa:	93 e0       	ldi	r25, 0x03	; 3
-  fc:	21 50       	subi	r18, 0x01	; 1
-  fe:	80 40       	sbci	r24, 0x00	; 0
- 100:	90 40       	sbci	r25, 0x00	; 0
- 102:	e1 f7       	brne	.-8      	; 0xfc <main+0x2a>
- 104:	00 c0       	rjmp	.+0      	; 0x106 <main+0x34>
- 106:	00 00       	nop
-					_delay_ms(1000);
-				}
-				CURRENT_STATE = checking_password;
- 108:	81 e0       	ldi	r24, 0x01	; 1
- 10a:	80 93 00 01 	sts	0x0100, r24	; 0x800100 <__DATA_REGION_ORIGIN__>
-				break;
- 10e:	e7 cf       	rjmp	.-50     	; 0xde <main+0xc>
-			case checking_password:
-				receiveData=0;
-				while(!(UCSR1A&(1<<RXC1)));
- 110:	17 9b       	sbis	0x02, 7	; 2
- 112:	fe cf       	rjmp	.-4      	; 0x110 <main+0x3e>
-				receiveData=UDR1;
- 114:	83 b1       	in	r24, 0x03	; 3
-				PORTC=receiveData;
- 116:	85 bb       	out	0x15, r24	; 21
- 118:	2f e3       	ldi	r18, 0x3F	; 63
- 11a:	8d e0       	ldi	r24, 0x0D	; 13
- 11c:	93 e0       	ldi	r25, 0x03	; 3
- 11e:	21 50       	subi	r18, 0x01	; 1
- 120:	80 40       	sbci	r24, 0x00	; 0
- 122:	90 40       	sbci	r25, 0x00	; 0
- 124:	e1 f7       	brne	.-8      	; 0x11e <main+0x4c>
- 126:	00 c0       	rjmp	.+0      	; 0x128 <main+0x56>
- 128:	00 00       	nop
-				_delay_ms(1000);
-				CURRENT_STATE = entering_password;
- 12a:	10 92 00 01 	sts	0x0100, r1	; 0x800100 <__DATA_REGION_ORIGIN__>
-				break;
- 12e:	d7 cf       	rjmp	.-82     	; 0xde <main+0xc>
+ 2b8:	ef e4       	ldi	r30, 0x4F	; 79
+ 2ba:	f3 ec       	ldi	r31, 0xC3	; 195
+ 2bc:	31 97       	sbiw	r30, 0x01	; 1
+ 2be:	f1 f7       	brne	.-4      	; 0x2bc <__EEPROM_REGION_LENGTH__+0xbc>
+ 2c0:	00 c0       	rjmp	.+0      	; 0x2c2 <__EEPROM_REGION_LENGTH__+0xc2>
+ 2c2:	00 00       	nop
+ 2c4:	70 cf       	rjmp	.-288    	; 0x1a6 <main+0x82>
 
-00000130 <_exit>:
- 130:	f8 94       	cli
+000002c6 <_exit>:
+ 2c6:	f8 94       	cli
 
-00000132 <__stop_program>:
- 132:	ff cf       	rjmp	.-2      	; 0x132 <__stop_program>
+000002c8 <__stop_program>:
+ 2c8:	ff cf       	rjmp	.-2      	; 0x2c8 <__stop_program>

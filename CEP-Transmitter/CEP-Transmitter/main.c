@@ -4,17 +4,16 @@
  * Created: 7/11/2022 1:57:30 PM
  * Author : Sohaib
  */ 
-
+#include <string.h>
 #include <avr/io.h>
 #define F_CPU 1000000UL
 #include<util/delay.h>
 
-#define PASSWORD_LENGTH 6
+#define PASSWORD_LENGTH 10
 
 // global variables
 enum states {entering_password, checking_password, incorrect_password, correct_password};
 enum states CURRENT_STATE = entering_password;
-const char CORRECT_PASSWORD[] = "12ABCD";
 
 // function prototypes
 void USART1_init(void);
@@ -23,7 +22,6 @@ char get_seven_segment_code(char data);
 int get_keypad_position(void);
 void USART1_transmit(char data);
 char USART1_receive(void);
-
 
 
 int main(void)
@@ -36,10 +34,11 @@ int main(void)
 	DDRA = 0xFF;  // set port A as output (for seven segment display)
 
 	char keypad_chars[20] = {'1', '2', '3', 'A', '4', '5', '6', 'B', '7', '8', '9', 'C', '*', '0', '#', 'D', '\0'};
-	char key_position, char_entered, password_correct_response;
+	int key_position;
+	char char_entered, password_correct_response;
 	int chars_entered = 0;  // number of characters entered in the password so far
 	char password[PASSWORD_LENGTH + 1] = ""; // password entered by the user
-
+	
 	while (-10 < 10)
 	{
 		switch (CURRENT_STATE)
@@ -76,7 +75,7 @@ int main(void)
 				PORTA = get_seven_segment_code('C');  // show "C" on the seven segment display
 
 				// send password to other microcontroller via USART1 charater by character
-				for (int i = 0; i < PASSWORD_LENGTH; i++)
+				for (int i = 0; i < strlen(password); i++)
 				{
 					USART1_transmit(password[i]);
 				}
@@ -84,7 +83,7 @@ int main(void)
 
 				//  reset password and number of characters entered
 				chars_entered = 0;
-				memset(password, 0, PASSWORD_LENGTH + 1);  // clear password array
+				memset(password, 0, PASSWORD_LENGTH);  // clear password array
 
 				// recieve response from other microcontroller
 				password_correct_response = USART1_receive();
@@ -99,25 +98,28 @@ int main(void)
 				break;
 
 			case incorrect_password:
-				PORTA = get_seven_segment_code('L');  // show "I" on the seven segment display
+				PORTA = get_seven_segment_code('L');  // show "L" on the seven segment display
 				
 				// when * key is pressed 
-				key_position = GetKeyPressed();
-				key_pressed = digit[key_position];
-				if (key_pressed == '*')
+				key_position = get_keypad_position();
+				char_entered = keypad_chars[key_position];
+				if (char_entered == '*')
 				{
-					state = entering_password;
+					CURRENT_STATE = entering_password;
 				}
 				break;
 
 			case correct_password:
-				PORTA = get_seven_segment_code('U');  // show "O" on the seven segment display
+				PORTA = get_seven_segment_code('U');  // show "U" on the seven segment display
 				
 				// wait till other microcontroller sends L to indicate that lock is closed again
 				while (USART1_receive() != 'L');
 
-				state = entering_password;
+				CURRENT_STATE = entering_password;
+				break;
 		}
+		_delay_ms(200);
+
 	}
 }
 

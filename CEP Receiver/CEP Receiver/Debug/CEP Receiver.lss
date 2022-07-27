@@ -3,62 +3,64 @@ CEP Receiver.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000002  00800100  0000013a  000001ae  2**0
+  0 .data         00000006  00800100  0000021e  000002b2  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         0000013a  00000000  00000000  00000074  2**1
+  1 .text         0000021e  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .comment      00000030  00000000  00000000  000001b0  2**0
+  2 .bss          00000001  00800106  00800106  000002b8  2**0
+                  ALLOC
+  3 .comment      00000030  00000000  00000000  000002b8  2**0
                   CONTENTS, READONLY
-  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000001e0  2**2
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000002e8  2**2
                   CONTENTS, READONLY
-  4 .debug_aranges 00000030  00000000  00000000  0000021c  2**0
+  5 .debug_aranges 00000048  00000000  00000000  00000324  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_info   000007c0  00000000  00000000  0000024c  2**0
+  6 .debug_info   0000091f  00000000  00000000  0000036c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_abbrev 000006c6  00000000  00000000  00000a0c  2**0
+  7 .debug_abbrev 00000770  00000000  00000000  00000c8b  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_line   00000312  00000000  00000000  000010d2  2**0
+  8 .debug_line   000003f5  00000000  00000000  000013fb  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_frame  00000044  00000000  00000000  000013e4  2**2
+  9 .debug_frame  00000084  00000000  00000000  000017f0  2**2
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_str    000003f0  00000000  00000000  00001428  2**0
+ 10 .debug_str    0000047c  00000000  00000000  00001874  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_loc    000000c4  00000000  00000000  00001818  2**0
+ 11 .debug_loc    000000ff  00000000  00000000  00001cf0  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_ranges 00000020  00000000  00000000  000018dc  2**0
+ 12 .debug_ranges 00000038  00000000  00000000  00001def  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
 
 00000000 <__vectors>:
    0:	0c 94 38 00 	jmp	0x70	; 0x70 <__ctors_end>
-   4:	0c 94 4d 00 	jmp	0x9a	; 0x9a <__bad_interrupt>
-   8:	0c 94 4d 00 	jmp	0x9a	; 0x9a <__bad_interrupt>
-   c:	0c 94 4d 00 	jmp	0x9a	; 0x9a <__bad_interrupt>
-  10:	0c 94 4d 00 	jmp	0x9a	; 0x9a <__bad_interrupt>
-  14:	0c 94 4d 00 	jmp	0x9a	; 0x9a <__bad_interrupt>
-  18:	0c 94 4d 00 	jmp	0x9a	; 0x9a <__bad_interrupt>
-  1c:	0c 94 4d 00 	jmp	0x9a	; 0x9a <__bad_interrupt>
-  20:	0c 94 4d 00 	jmp	0x9a	; 0x9a <__bad_interrupt>
-  24:	0c 94 4d 00 	jmp	0x9a	; 0x9a <__bad_interrupt>
-  28:	0c 94 4d 00 	jmp	0x9a	; 0x9a <__bad_interrupt>
-  2c:	0c 94 4d 00 	jmp	0x9a	; 0x9a <__bad_interrupt>
-  30:	0c 94 4d 00 	jmp	0x9a	; 0x9a <__bad_interrupt>
-  34:	0c 94 4d 00 	jmp	0x9a	; 0x9a <__bad_interrupt>
-  38:	0c 94 4d 00 	jmp	0x9a	; 0x9a <__bad_interrupt>
-  3c:	0c 94 4d 00 	jmp	0x9a	; 0x9a <__bad_interrupt>
-  40:	0c 94 4d 00 	jmp	0x9a	; 0x9a <__bad_interrupt>
-  44:	0c 94 4d 00 	jmp	0x9a	; 0x9a <__bad_interrupt>
-  48:	0c 94 4d 00 	jmp	0x9a	; 0x9a <__bad_interrupt>
-  4c:	0c 94 4d 00 	jmp	0x9a	; 0x9a <__bad_interrupt>
-  50:	0c 94 4d 00 	jmp	0x9a	; 0x9a <__bad_interrupt>
-  54:	0c 94 4d 00 	jmp	0x9a	; 0x9a <__bad_interrupt>
-  58:	0c 94 4d 00 	jmp	0x9a	; 0x9a <__bad_interrupt>
-  5c:	0c 94 4d 00 	jmp	0x9a	; 0x9a <__bad_interrupt>
-  60:	0c 94 4d 00 	jmp	0x9a	; 0x9a <__bad_interrupt>
-  64:	0c 94 4d 00 	jmp	0x9a	; 0x9a <__bad_interrupt>
-  68:	0c 94 4d 00 	jmp	0x9a	; 0x9a <__bad_interrupt>
-  6c:	0c 94 4d 00 	jmp	0x9a	; 0x9a <__bad_interrupt>
+   4:	0c 94 55 00 	jmp	0xaa	; 0xaa <__bad_interrupt>
+   8:	0c 94 55 00 	jmp	0xaa	; 0xaa <__bad_interrupt>
+   c:	0c 94 55 00 	jmp	0xaa	; 0xaa <__bad_interrupt>
+  10:	0c 94 55 00 	jmp	0xaa	; 0xaa <__bad_interrupt>
+  14:	0c 94 55 00 	jmp	0xaa	; 0xaa <__bad_interrupt>
+  18:	0c 94 55 00 	jmp	0xaa	; 0xaa <__bad_interrupt>
+  1c:	0c 94 55 00 	jmp	0xaa	; 0xaa <__bad_interrupt>
+  20:	0c 94 55 00 	jmp	0xaa	; 0xaa <__bad_interrupt>
+  24:	0c 94 55 00 	jmp	0xaa	; 0xaa <__bad_interrupt>
+  28:	0c 94 55 00 	jmp	0xaa	; 0xaa <__bad_interrupt>
+  2c:	0c 94 55 00 	jmp	0xaa	; 0xaa <__bad_interrupt>
+  30:	0c 94 55 00 	jmp	0xaa	; 0xaa <__bad_interrupt>
+  34:	0c 94 55 00 	jmp	0xaa	; 0xaa <__bad_interrupt>
+  38:	0c 94 55 00 	jmp	0xaa	; 0xaa <__bad_interrupt>
+  3c:	0c 94 55 00 	jmp	0xaa	; 0xaa <__bad_interrupt>
+  40:	0c 94 55 00 	jmp	0xaa	; 0xaa <__bad_interrupt>
+  44:	0c 94 55 00 	jmp	0xaa	; 0xaa <__bad_interrupt>
+  48:	0c 94 55 00 	jmp	0xaa	; 0xaa <__bad_interrupt>
+  4c:	0c 94 55 00 	jmp	0xaa	; 0xaa <__bad_interrupt>
+  50:	0c 94 55 00 	jmp	0xaa	; 0xaa <__bad_interrupt>
+  54:	0c 94 55 00 	jmp	0xaa	; 0xaa <__bad_interrupt>
+  58:	0c 94 55 00 	jmp	0xaa	; 0xaa <__bad_interrupt>
+  5c:	0c 94 55 00 	jmp	0xaa	; 0xaa <__bad_interrupt>
+  60:	0c 94 55 00 	jmp	0xaa	; 0xaa <__bad_interrupt>
+  64:	0c 94 55 00 	jmp	0xaa	; 0xaa <__bad_interrupt>
+  68:	0c 94 55 00 	jmp	0xaa	; 0xaa <__bad_interrupt>
+  6c:	0c 94 55 00 	jmp	0xaa	; 0xaa <__bad_interrupt>
 
 00000070 <__ctors_end>:
   70:	11 24       	eor	r1, r1
@@ -72,160 +74,368 @@ Disassembly of section .text:
   7c:	11 e0       	ldi	r17, 0x01	; 1
   7e:	a0 e0       	ldi	r26, 0x00	; 0
   80:	b1 e0       	ldi	r27, 0x01	; 1
-  82:	ea e3       	ldi	r30, 0x3A	; 58
-  84:	f1 e0       	ldi	r31, 0x01	; 1
+  82:	ee e1       	ldi	r30, 0x1E	; 30
+  84:	f2 e0       	ldi	r31, 0x02	; 2
   86:	02 c0       	rjmp	.+4      	; 0x8c <__do_copy_data+0x10>
   88:	05 90       	lpm	r0, Z+
   8a:	0d 92       	st	X+, r0
-  8c:	a2 30       	cpi	r26, 0x02	; 2
+  8c:	a6 30       	cpi	r26, 0x06	; 6
   8e:	b1 07       	cpc	r27, r17
   90:	d9 f7       	brne	.-10     	; 0x88 <__do_copy_data+0xc>
-  92:	0e 94 6c 00 	call	0xd8	; 0xd8 <main>
-  96:	0c 94 9b 00 	jmp	0x136	; 0x136 <_exit>
 
-0000009a <__bad_interrupt>:
-  9a:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+00000092 <__do_clear_bss>:
+  92:	21 e0       	ldi	r18, 0x01	; 1
+  94:	a6 e0       	ldi	r26, 0x06	; 6
+  96:	b1 e0       	ldi	r27, 0x01	; 1
+  98:	01 c0       	rjmp	.+2      	; 0x9c <.do_clear_bss_start>
 
-0000009e <keypad_init>:
-}
+0000009a <.do_clear_bss_loop>:
+  9a:	1d 92       	st	X+, r1
 
+0000009c <.do_clear_bss_start>:
+  9c:	a7 30       	cpi	r26, 0x07	; 7
+  9e:	b2 07       	cpc	r27, r18
+  a0:	e1 f7       	brne	.-8      	; 0x9a <.do_clear_bss_loop>
+  a2:	0e 94 90 00 	call	0x120	; 0x120 <main>
+  a6:	0c 94 0d 01 	jmp	0x21a	; 0x21a <_exit>
 
-void keypad_init(void)
-{
-	DDRB |= (1 << PB1);  // set port B bit 1 as output for OE' of keypad decoder IC
-  9e:	87 b3       	in	r24, 0x17	; 23
-  a0:	82 60       	ori	r24, 0x02	; 2
-  a2:	87 bb       	out	0x17, r24	; 23
-	DDRC &= ~(1 << PC0);  // set port C bit 0 as output for DA (data available) of keypad decoder IC
-  a4:	84 b3       	in	r24, 0x14	; 20
-  a6:	8e 7f       	andi	r24, 0xFE	; 254
-  a8:	84 bb       	out	0x14, r24	; 20
-	DDRD |= 0xF0;  // set bits 0 to 3 of port D as input for keypad decoder IC ABCD
-  aa:	81 b3       	in	r24, 0x11	; 17
-  ac:	80 6f       	ori	r24, 0xF0	; 240
-  ae:	81 bb       	out	0x11, r24	; 17
-  b0:	08 95       	ret
+000000aa <__bad_interrupt>:
+  aa:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
 
-000000b2 <USART1_init>:
+000000ae <USART1_init>:
 }
 
 
 void USART1_init(void)
 {
 	DDRB |= (1<<PB3);  // set port B bit 3 as output for TXD1 of USART1
-  b2:	87 b3       	in	r24, 0x17	; 23
-  b4:	88 60       	ori	r24, 0x08	; 8
-  b6:	87 bb       	out	0x17, r24	; 23
+  ae:	87 b3       	in	r24, 0x17	; 23
+  b0:	88 60       	ori	r24, 0x08	; 8
+  b2:	87 bb       	out	0x17, r24	; 23
 	DDRB &= ~(1<<PB2);  // set port B bit 2 as input for RXD1 of USART1
-  b8:	87 b3       	in	r24, 0x17	; 23
-  ba:	8b 7f       	andi	r24, 0xFB	; 251
-  bc:	87 bb       	out	0x17, r24	; 23
+  b4:	87 b3       	in	r24, 0x17	; 23
+  b6:	8b 7f       	andi	r24, 0xFB	; 251
+  b8:	87 bb       	out	0x17, r24	; 23
 	PORTB |= (1<<PB2);  // set port B bit 2 as high for RXD1 of USART1 (pull-up)
-  be:	88 b3       	in	r24, 0x18	; 24
-  c0:	84 60       	ori	r24, 0x04	; 4
-  c2:	88 bb       	out	0x18, r24	; 24
+  ba:	88 b3       	in	r24, 0x18	; 24
+  bc:	84 60       	ori	r24, 0x04	; 4
+  be:	88 bb       	out	0x18, r24	; 24
 	// int UBBRValue=25;
 	UBRR1H=0x00;  // set baud rate
-  c4:	1c be       	out	0x3c, r1	; 60
+  c0:	1c be       	out	0x3c, r1	; 60
 	UBRR1L=0x05;  // set baud rate
-  c6:	85 e0       	ldi	r24, 0x05	; 5
-  c8:	80 b9       	out	0x00, r24	; 0
+  c2:	85 e0       	ldi	r24, 0x05	; 5
+  c4:	80 b9       	out	0x00, r24	; 0
 	UCSR1C |= (1 << USBS1) | (3 << UCSZ10);  // 2-bit Stop Bits, 8-bit character size
-  ca:	8c b7       	in	r24, 0x3c	; 60
-  cc:	8e 60       	ori	r24, 0x0E	; 14
-  ce:	8c bf       	out	0x3c, r24	; 60
-	UCSR1B |= (1 << RXEN1) | (1 << TXEN1);  // enable receiving and transmitting
-  d0:	81 b1       	in	r24, 0x01	; 1
-  d2:	88 61       	ori	r24, 0x18	; 24
-  d4:	81 b9       	out	0x01, r24	; 1
-  d6:	08 95       	ret
+  c6:	8c b7       	in	r24, 0x3c	; 60
+  c8:	8e 60       	ori	r24, 0x0E	; 14
+  ca:	8c bf       	out	0x3c, r24	; 60
+	UCSR1B |= (1 << RXEN1) | (1 << TXEN1);  // enable recieving and transmition 
+  cc:	81 b1       	in	r24, 0x01	; 1
+  ce:	88 61       	ori	r24, 0x18	; 24
+  d0:	81 b9       	out	0x01, r24	; 1
+  d2:	08 95       	ret
 
-000000d8 <main>:
+000000d4 <timer0_fastpwm_init>:
+}
+
+
+void timer0_fastpwm_init(void)
+{
+	TCCR0 &= ~(1 << FOC0);  // set FOC0 as 0 
+  d4:	83 b7       	in	r24, 0x33	; 51
+  d6:	8f 77       	andi	r24, 0x7F	; 127
+  d8:	83 bf       	out	0x33, r24	; 51
+	value present in the COM01:0 bits that determines the effect of the forced compare.
+	A FOC0 strobe will not generate any interrupt, nor will it clear the timer in CTC mode using
+	OCR0 as TOP.
+	The FOC0 bit is always read as zero. */
+
+	TCCR0 |= (1 << WGM00) | (1 << WGM01);  // Waveform Generation Mode => PWM
+  da:	83 b7       	in	r24, 0x33	; 51
+  dc:	88 64       	ori	r24, 0x48	; 72
+  de:	83 bf       	out	0x33, r24	; 51
+    TCCR0 |= (1 << COM01);  // Clear OC0 on Compare Match, set OC0 at TOP (non-inverting mode)
+  e0:	83 b7       	in	r24, 0x33	; 51
+  e2:	80 62       	ori	r24, 0x20	; 32
+  e4:	83 bf       	out	0x33, r24	; 51
+	TCCR0 &= ~(1 << COM00);  // Clear OC0 on Compare Match, set OC0 at TOP (non-inverting mode)
+  e6:	83 b7       	in	r24, 0x33	; 51
+  e8:	8f 7e       	andi	r24, 0xEF	; 239
+  ea:	83 bf       	out	0x33, r24	; 51
+    TCCR0 |= (1 << CS01) | (1 << CS00);  // Clock Select => clk/64 (from prescaler)
+  ec:	83 b7       	in	r24, 0x33	; 51
+  ee:	83 60       	ori	r24, 0x03	; 3
+  f0:	83 bf       	out	0x33, r24	; 51
+
+	DDRB |= (1 << PB0);  // set PB0 as output for PWM (OC0)
+  f2:	87 b3       	in	r24, 0x17	; 23
+  f4:	81 60       	ori	r24, 0x01	; 1
+  f6:	87 bb       	out	0x17, r24	; 23
+  f8:	08 95       	ret
+
+000000fa <USART1_transmit>:
+}
+
+void USART1_transmit(char data)
+{
+	while (!(UCSR1A & (1 << UDRE1)));  // wait until UDRE is empty
+  fa:	15 9b       	sbis	0x02, 5	; 2
+  fc:	fe cf       	rjmp	.-4      	; 0xfa <USART1_transmit>
+	UDR1 = data;  // send data
+  fe:	83 b9       	out	0x03, r24	; 3
+ 100:	08 95       	ret
+
+00000102 <USART1_receive>:
+}
+
+
+char USART1_receive(void)
+{
+	while (!(UCSR1A & (1 << RXC1)));  // wait until data is received
+ 102:	17 9b       	sbis	0x02, 7	; 2
+ 104:	fe cf       	rjmp	.-4      	; 0x102 <USART1_receive>
+	return UDR1;  // return data
+ 106:	83 b1       	in	r24, 0x03	; 3
+}
+ 108:	08 95       	ret
+
+0000010a <set_servo_position>:
+
+
+void set_servo_position(enum servo_states servo_state)
+{
+	// 22.5 value for neutral position, less than that for latch position, greater than that for unlatch position
+	switch (servo_state)
+ 10a:	88 23       	and	r24, r24
+ 10c:	19 f0       	breq	.+6      	; 0x114 <set_servo_position+0xa>
+ 10e:	81 30       	cpi	r24, 0x01	; 1
+ 110:	21 f0       	breq	.+8      	; 0x11a <set_servo_position+0x10>
+ 112:	08 95       	ret
+	{
+		case latch:
+			OCR0 = 10;
+ 114:	8a e0       	ldi	r24, 0x0A	; 10
+ 116:	81 bf       	out	0x31, r24	; 49
+			break;
+ 118:	08 95       	ret
+		case unlatch:
+			OCR0 = 40;
+ 11a:	88 e2       	ldi	r24, 0x28	; 40
+ 11c:	81 bf       	out	0x31, r24	; 49
+ 11e:	08 95       	ret
+
+00000120 <main>:
+char USART1_receive(void);
+void set_servo_position(enum servo_states servo_state);
 
 
 int main(void)
 {
+ 120:	cf 93       	push	r28
+ 122:	df 93       	push	r29
+ 124:	cd b7       	in	r28, 0x3d	; 61
+ 126:	de b7       	in	r29, 0x3e	; 62
+ 128:	2b 97       	sbiw	r28, 0x0b	; 11
+ 12a:	0f b6       	in	r0, 0x3f	; 63
+ 12c:	f8 94       	cli
+ 12e:	de bf       	out	0x3e, r29	; 62
+ 130:	0f be       	out	0x3f, r0	; 63
+ 132:	cd bf       	out	0x3d, r28	; 61
 	// initializations
 	USART1_init();  // initialize USART1
-  d8:	0e 94 59 00 	call	0xb2	; 0xb2 <USART1_init>
-	// set_USART1_mode(transmitter);  // set USART1 to transmitter mode
-	keypad_init();  // initialize keypad
-  dc:	0e 94 4f 00 	call	0x9e	; 0x9e <keypad_init>
+ 134:	0e 94 57 00 	call	0xae	; 0xae <USART1_init>
+	timer0_fastpwm_init();  // initialize timer / pwm
+ 138:	0e 94 6a 00 	call	0xd4	; 0xd4 <timer0_fastpwm_init>
+	set_servo_position(latch);  // set servo to latch position
+ 13c:	80 e0       	ldi	r24, 0x00	; 0
+ 13e:	0e 94 85 00 	call	0x10a	; 0x10a <set_servo_position>
 
-	DDRC = 0xFF; // set port C as output
-  e0:	8f ef       	ldi	r24, 0xFF	; 255
-  e2:	84 bb       	out	0x14, r24	; 20
-	char receiveData;
-
-	while (1)
+	DDRD &= ~(1 << PD7);  // set port D pin 7 as input (for push button)
+ 142:	81 b3       	in	r24, 0x11	; 17
+ 144:	8f 77       	andi	r24, 0x7F	; 127
+ 146:	81 bb       	out	0x11, r24	; 17
+	PORTD &= ~(1 << PD7);
+ 148:	82 b3       	in	r24, 0x12	; 18
+ 14a:	8f 77       	andi	r24, 0x7F	; 127
+ 14c:	82 bb       	out	0x12, r24	; 18
+	
+	char x = 0x00;
+	char password[PASSWORD_LENGTH + 1] = ""; // password received from other microcontroller
+ 14e:	1a 82       	std	Y+2, r1	; 0x02
+ 150:	19 82       	std	Y+1, r1	; 0x01
+ 152:	fe 01       	movw	r30, r28
+ 154:	33 96       	adiw	r30, 0x03	; 3
+ 156:	89 e0       	ldi	r24, 0x09	; 9
+ 158:	df 01       	movw	r26, r30
+ 15a:	1d 92       	st	X+, r1
+ 15c:	8a 95       	dec	r24
+ 15e:	e9 f7       	brne	.-6      	; 0x15a <main+0x3a>
+	int chars_entered = 0;  // number of characters recieved
+ 160:	00 e0       	ldi	r16, 0x00	; 0
+ 162:	10 e0       	ldi	r17, 0x00	; 0
+	while (2 + 2 == 4)
 	{
+	
 		switch (CURRENT_STATE)
-  e4:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <__DATA_REGION_ORIGIN__>
-  e8:	88 23       	and	r24, r24
-  ea:	19 f0       	breq	.+6      	; 0xf2 <main+0x1a>
-  ec:	81 30       	cpi	r24, 0x01	; 1
-  ee:	99 f0       	breq	.+38     	; 0x116 <main+0x3e>
-  f0:	f9 cf       	rjmp	.-14     	; 0xe4 <main+0xc>
+ 164:	80 91 06 01 	lds	r24, 0x0106	; 0x800106 <__data_end>
+ 168:	81 30       	cpi	r24, 0x01	; 1
+ 16a:	e1 f0       	breq	.+56     	; 0x1a4 <main+0x84>
+ 16c:	18 f0       	brcs	.+6      	; 0x174 <main+0x54>
+ 16e:	82 30       	cpi	r24, 0x02	; 2
+ 170:	39 f1       	breq	.+78     	; 0x1c0 <main+0xa0>
+ 172:	43 c0       	rjmp	.+134    	; 0x1fa <main+0xda>
 		{
-			case entering_password:
-				PORTC = 0x00;
-  f2:	15 ba       	out	0x15, r1	; 21
-				char y=0b10101010;
+
+			case locked:
+
+				set_servo_position(latch);  // set servo to latch position
+ 174:	80 e0       	ldi	r24, 0x00	; 0
+ 176:	0e 94 85 00 	call	0x10a	; 0x10a <set_servo_position>
+				
+				// recieve password from other microcontroller
+				while (chars_entered < PASSWORD_LENGTH)
+ 17a:	0d c0       	rjmp	.+26     	; 0x196 <main+0x76>
 				{
-					while(!(UCSR1A&(1<<UDRE1)));
-  f4:	15 9b       	sbis	0x02, 5	; 2
-  f6:	fe cf       	rjmp	.-4      	; 0xf4 <main+0x1c>
-					UDR1 = y;
-  f8:	8a ea       	ldi	r24, 0xAA	; 170
-  fa:	83 b9       	out	0x03, r24	; 3
+					char received_char = USART1_receive();
+ 17c:	0e 94 81 00 	call	0x102	; 0x102 <USART1_receive>
+					if (received_char == '*')
+ 180:	8a 32       	cpi	r24, 0x2A	; 42
+ 182:	61 f0       	breq	.+24     	; 0x19c <main+0x7c>
+					{
+						break;  // break while loop
+					}
+					password[chars_entered] = received_char;
+ 184:	e1 e0       	ldi	r30, 0x01	; 1
+ 186:	f0 e0       	ldi	r31, 0x00	; 0
+ 188:	ec 0f       	add	r30, r28
+ 18a:	fd 1f       	adc	r31, r29
+ 18c:	e0 0f       	add	r30, r16
+ 18e:	f1 1f       	adc	r31, r17
+ 190:	80 83       	st	Z, r24
+					chars_entered++;
+ 192:	0f 5f       	subi	r16, 0xFF	; 255
+ 194:	1f 4f       	sbci	r17, 0xFF	; 255
+			case locked:
+
+				set_servo_position(latch);  // set servo to latch position
+				
+				// recieve password from other microcontroller
+				while (chars_entered < PASSWORD_LENGTH)
+ 196:	0a 30       	cpi	r16, 0x0A	; 10
+ 198:	11 05       	cpc	r17, r1
+ 19a:	84 f3       	brlt	.-32     	; 0x17c <main+0x5c>
+					}
+					password[chars_entered] = received_char;
+					chars_entered++;
+				}
+
+				CURRENT_STATE = checking_password;
+ 19c:	82 e0       	ldi	r24, 0x02	; 2
+ 19e:	80 93 06 01 	sts	0x0106, r24	; 0x800106 <__data_end>
+				break;  // break case locked
+ 1a2:	2b c0       	rjmp	.+86     	; 0x1fa <main+0xda>
+
+			case unlocked:
+				set_servo_position(unlatch);  // set servo to unlatch position
+ 1a4:	81 e0       	ldi	r24, 0x01	; 1
+ 1a6:	0e 94 85 00 	call	0x10a	; 0x10a <set_servo_position>
+				
+				do 
+				{
+					x = (PIND & (1 << PD7)) >> 7;  // read port D pin 7
+				} while (x == 0x00);
+ 1aa:	87 9b       	sbis	0x10, 7	; 16
+ 1ac:	fe cf       	rjmp	.-4      	; 0x1aa <main+0x8a>
+				x = 
+ 1ae:	82 b3       	in	r24, 0x12	; 18
+ 1b0:	8f 77       	andi	r24, 0x7F	; 127
+				PORTD &= ~(1 << PD7);
+ 1b2:	82 bb       	out	0x12, r24	; 18
+				
+				USART1_transmit('L');
+ 1b4:	8c e4       	ldi	r24, 0x4C	; 76
+ 1b6:	0e 94 7d 00 	call	0xfa	; 0xfa <USART1_transmit>
+
+				CURRENT_STATE = locked;  // go to locked state
+ 1ba:	10 92 06 01 	sts	0x0106, r1	; 0x800106 <__data_end>
+				break;  // break case unlocked
+ 1be:	1d c0       	rjmp	.+58     	; 0x1fa <main+0xda>
+
+			case checking_password:
+				if (strcmp(password, CORRECT_PASSWORD) == 0)
+ 1c0:	60 e0       	ldi	r22, 0x00	; 0
+ 1c2:	71 e0       	ldi	r23, 0x01	; 1
+ 1c4:	ce 01       	movw	r24, r28
+ 1c6:	01 96       	adiw	r24, 0x01	; 1
+ 1c8:	0e 94 04 01 	call	0x208	; 0x208 <strcmp>
+ 1cc:	89 2b       	or	r24, r25
+ 1ce:	39 f4       	brne	.+14     	; 0x1de <main+0xbe>
+				{
+					// send unlocked status to other microcontroller (correct password)
+					USART1_transmit('1');
+ 1d0:	81 e3       	ldi	r24, 0x31	; 49
+ 1d2:	0e 94 7d 00 	call	0xfa	; 0xfa <USART1_transmit>
+					CURRENT_STATE = unlocked;
+ 1d6:	81 e0       	ldi	r24, 0x01	; 1
+ 1d8:	80 93 06 01 	sts	0x0106, r24	; 0x800106 <__data_end>
+ 1dc:	05 c0       	rjmp	.+10     	; 0x1e8 <main+0xc8>
+				}
+				else
+				{
+					// send locked status to other microcontroller (incorrect password)
+					USART1_transmit('0');
+ 1de:	80 e3       	ldi	r24, 0x30	; 48
+ 1e0:	0e 94 7d 00 	call	0xfa	; 0xfa <USART1_transmit>
+					CURRENT_STATE = locked;
+ 1e4:	10 92 06 01 	sts	0x0106, r1	; 0x800106 <__data_end>
+				}
+
+				//  reset password and number of characters entered
+				chars_entered = 0;
+				memset(password, 0, PASSWORD_LENGTH);  // clear password array
+ 1e8:	fe 01       	movw	r30, r28
+ 1ea:	31 96       	adiw	r30, 0x01	; 1
+ 1ec:	8a e0       	ldi	r24, 0x0A	; 10
+ 1ee:	df 01       	movw	r26, r30
+ 1f0:	1d 92       	st	X+, r1
+ 1f2:	8a 95       	dec	r24
+ 1f4:	e9 f7       	brne	.-6      	; 0x1f0 <main+0xd0>
+					USART1_transmit('0');
+					CURRENT_STATE = locked;
+				}
+
+				//  reset password and number of characters entered
+				chars_entered = 0;
+ 1f6:	00 e0       	ldi	r16, 0x00	; 0
+ 1f8:	10 e0       	ldi	r17, 0x00	; 0
 	#else
 		//round up by default
 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
 	#endif
 
 	__builtin_avr_delay_cycles(__ticks_dc);
-  fc:	2f e3       	ldi	r18, 0x3F	; 63
-  fe:	8d e0       	ldi	r24, 0x0D	; 13
- 100:	93 e0       	ldi	r25, 0x03	; 3
- 102:	21 50       	subi	r18, 0x01	; 1
- 104:	80 40       	sbci	r24, 0x00	; 0
- 106:	90 40       	sbci	r25, 0x00	; 0
- 108:	e1 f7       	brne	.-8      	; 0x102 <main+0x2a>
- 10a:	00 c0       	rjmp	.+0      	; 0x10c <main+0x34>
- 10c:	00 00       	nop
-					_delay_ms(1000);
-				}
-				CURRENT_STATE = checking_password;
- 10e:	81 e0       	ldi	r24, 0x01	; 1
- 110:	80 93 00 01 	sts	0x0100, r24	; 0x800100 <__DATA_REGION_ORIGIN__>
-				break;
- 114:	e7 cf       	rjmp	.-50     	; 0xe4 <main+0xc>
-			case checking_password:
-				receiveData=0;
-				while(!(UCSR1A&(1<<RXC1)));
- 116:	17 9b       	sbis	0x02, 7	; 2
- 118:	fe cf       	rjmp	.-4      	; 0x116 <main+0x3e>
-				receiveData=UDR1;
- 11a:	83 b1       	in	r24, 0x03	; 3
-				PORTC=receiveData;
- 11c:	85 bb       	out	0x15, r24	; 21
- 11e:	2f e3       	ldi	r18, 0x3F	; 63
- 120:	8d e0       	ldi	r24, 0x0D	; 13
- 122:	93 e0       	ldi	r25, 0x03	; 3
- 124:	21 50       	subi	r18, 0x01	; 1
- 126:	80 40       	sbci	r24, 0x00	; 0
- 128:	90 40       	sbci	r25, 0x00	; 0
- 12a:	e1 f7       	brne	.-8      	; 0x124 <main+0x4c>
- 12c:	00 c0       	rjmp	.+0      	; 0x12e <main+0x56>
- 12e:	00 00       	nop
-				_delay_ms(1000);
-				CURRENT_STATE = entering_password;
- 130:	10 92 00 01 	sts	0x0100, r1	; 0x800100 <__DATA_REGION_ORIGIN__>
-				break;
- 134:	d7 cf       	rjmp	.-82     	; 0xe4 <main+0xc>
+ 1fa:	8f e4       	ldi	r24, 0x4F	; 79
+ 1fc:	93 ec       	ldi	r25, 0xC3	; 195
+ 1fe:	01 97       	sbiw	r24, 0x01	; 1
+ 200:	f1 f7       	brne	.-4      	; 0x1fe <main+0xde>
+ 202:	00 c0       	rjmp	.+0      	; 0x204 <__EEPROM_REGION_LENGTH__+0x4>
+ 204:	00 00       	nop
+ 206:	ae cf       	rjmp	.-164    	; 0x164 <main+0x44>
 
-00000136 <_exit>:
- 136:	f8 94       	cli
+00000208 <strcmp>:
+ 208:	fb 01       	movw	r30, r22
+ 20a:	dc 01       	movw	r26, r24
+ 20c:	8d 91       	ld	r24, X+
+ 20e:	01 90       	ld	r0, Z+
+ 210:	80 19       	sub	r24, r0
+ 212:	01 10       	cpse	r0, r1
+ 214:	d9 f3       	breq	.-10     	; 0x20c <strcmp+0x4>
+ 216:	99 0b       	sbc	r25, r25
+ 218:	08 95       	ret
 
-00000138 <__stop_program>:
- 138:	ff cf       	rjmp	.-2      	; 0x138 <__stop_program>
+0000021a <_exit>:
+ 21a:	f8 94       	cli
+
+0000021c <__stop_program>:
+ 21c:	ff cf       	rjmp	.-2      	; 0x21c <__stop_program>
